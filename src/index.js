@@ -39,15 +39,15 @@ app.get('/users/:id', (req, res) => {
     return res.status(404).send();
   }
 
-  User.findById({ _id: _id })
+  User.findById(_id)
     .then((user) => {
       if (!user) {
         return res.status(404).send();
       }
       res.send(user);
     })
-    .catch((e) => {
-      res.status(500).send();
+    .catch((error) => {
+      res.status(500).send(error);
     });
 });
 
@@ -61,6 +61,37 @@ app.post('/tasks', (req, res) => {
     })
     .catch((error) => {
       res.status(400).send(error);
+    });
+});
+
+app.get('/tasks', (req, res) => {
+  Task.find({})
+    .then((users) => {
+      res.send(users);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
+app.get('/tasks/:id', (req, res) => {
+  const _id = req.params.id;
+
+  if (!ObjectId.isValid(_id)) {
+    console.log('Not valid id');
+    return res.status(404).send();
+  }
+
+  Task.findById(_id)
+    .then((users) => {
+      if (!users) {
+        console.log('no task found');
+        return res.status(404).send();
+      }
+      res.send(users);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
     });
 });
 

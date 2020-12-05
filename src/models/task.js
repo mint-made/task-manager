@@ -10,9 +10,6 @@ const Task = mongoose.model('Task', {
     type: Boolean,
     default: false,
   },
-  _id: {
-    type: String,
-  },
 });
 
 module.exports = Task;
