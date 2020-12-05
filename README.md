@@ -13,5 +13,6 @@ A node.js application to keep track of tasks that a user has, creating, removing
 - node.js
 - monogoDB
 - mongoose
+- REST APIs
 
 ### Attribution
