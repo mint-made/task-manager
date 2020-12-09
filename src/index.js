@@ -49,10 +49,18 @@ app.get('/users/:id', async (req, res) => {
 
 app.patch('/users/:id', async (req, res) => {
   const _id = req.params.id;
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['name', 'email', 'password', 'age'];
+  const isValidOpperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOpperation) {
+    return res.status(400).send({ error: 'Update not permitted' });
+  }
 
   if (!ObjectId.isValid(_id)) {
     console.log('invalid id');
-    return res.status(404).send();
+    return res.status(404).send({ error: 'Invalid ID' });
   }
 
   try {
@@ -107,6 +115,36 @@ app.get('/tasks/:id', async (req, res) => {
     res.send(task);
   } catch (e) {
     res.status(500).send(e);
+  }
+});
+
+app.patch('/tasks/:id', async (req, res) => {
+  const _id = req.params.id;
+  const allowedUpdates = ['description', 'completed'];
+  const updates = Object.keys(req.body);
+  const isValidOpperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+
+  if (!isValidOpperation) {
+    return res.status(400).send({ error: 'update not permitted' });
+  }
+
+  if (!ObjectId.isValid(_id)) {
+    return res.status(404).send({ error: 'Invalid ID' });
+  }
+
+  try {
+    const task = await Task.findByIdAndUpdate(_id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!task) {
+      return res.status(404).send({ error: 'No task found' });
+    }
+    res.send(task);
+  } catch (e) {
+    res.status(400).send(e);
   }
 });
 
