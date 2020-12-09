@@ -25,7 +25,7 @@ app.get('/users', async (req, res) => {
     const users = await User.find({});
     res.send(users);
   } catch (e) {
-    res.status(500).send();
+    res.status(500).send(e);
   }
 });
 
@@ -33,13 +33,13 @@ app.get('/users/:id', async (req, res) => {
   const _id = req.params.id; // Access the id provided
 
   if (!ObjectId.isValid(_id)) {
-    return res.status(404).send();
+    return res.status(404).send({ error: 'Invalid ID' });
   }
 
   try {
     const user = await User.findById(_id);
     if (!user) {
-      return res.status(404).send();
+      return res.status(404).send({ error: 'No user found' });
     }
     res.send(user);
   } catch (e) {
@@ -69,8 +69,7 @@ app.patch('/users/:id', async (req, res) => {
       runValidators: true,
     });
     if (!user) {
-      console.log('No user found');
-      return res.status(404).send();
+      return res.status(404).send({ error: 'No user found' });
     }
     res.send(user);
   } catch (e) {
@@ -102,15 +101,13 @@ app.get('/tasks/:id', async (req, res) => {
   const _id = req.params.id;
 
   if (!ObjectId.isValid(_id)) {
-    console.log('Not valid id');
-    return res.status(404).send();
+    return res.status(404).send({ error: 'Invalid ID' });
   }
 
   try {
     const task = await Task.findById(_id);
     if (!task) {
-      console.log('no task found');
-      return res.status(404).send();
+      return res.status(404).send({ error: 'No task found' });
     }
     res.send(task);
   } catch (e) {
