@@ -77,6 +77,24 @@ app.patch('/users/:id', async (req, res) => {
   }
 });
 
+app.delete('/users/:id', async (req, res) => {
+  const _id = req.params.id;
+
+  if (!ObjectId.isValid(_id)) {
+    res.status(404).send({ error: 'Invalid ID' });
+  }
+
+  try {
+    const user = await User.findByIdAndDelete(_id);
+    if (!user) {
+      return res.status(404).send({ error: 'No user found' });
+    }
+    res.send(user);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
 app.post('/tasks', async (req, res) => {
   const task = new Task(req.body);
 
@@ -142,6 +160,24 @@ app.patch('/tasks/:id', async (req, res) => {
     res.send(task);
   } catch (e) {
     res.status(400).send(e);
+  }
+});
+
+app.delete('/tasks/:id', async (req, res) => {
+  const _id = req.params.id;
+
+  if (!ObjectId.isValid(_id)) {
+    res.status(404).send({ error: 'Invalid ID' });
+  }
+
+  try {
+    const task = await Task.findByIdAndDelete(_id);
+    if (!task) {
+      res.status(404).send({ error: 'No task found' });
+    }
+    res.send(task);
+  } catch (e) {
+    res.status(500).send(e);
   }
 });
 
