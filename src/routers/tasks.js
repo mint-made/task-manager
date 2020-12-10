@@ -2,6 +2,7 @@ const express = require('express');
 const Task = require('../models/task');
 const { ObjectId } = require('mongodb');
 const auth = require('../middleware/auth');
+const { translateAliases } = require('../models/task');
 
 const router = new express.Router();
 
@@ -74,15 +75,16 @@ router.patch('/tasks/:id', auth, async (req, res) => {
   }
 });
 
-router.delete('/tasks/:id', async (req, res) => {
-  const _id = req.params.id;
-
-  if (!ObjectId.isValid(_id)) {
+router.delete('/tasks/:id', auth, async (req, res) => {
+  if (!ObjectId.isValid(req.params.id)) {
     res.status(404).send({ error: 'Invalid ID' });
   }
 
   try {
-    const task = await Task.findByIdAndDelete(_id);
+    const task = await Task.findOneAndDelete({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
     if (!task) {
       res.status(404).send({ error: 'No task found' });
     }
