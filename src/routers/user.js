@@ -60,24 +60,6 @@ router.get('/users/me', auth, async (req, res) => {
   res.send(req.user);
 });
 
-router.get('/users/:id', async (req, res) => {
-  const _id = req.params.id; // Access the id provided
-
-  if (!ObjectId.isValid(_id)) {
-    return res.status(404).send({ error: 'Invalid ID' });
-  }
-
-  try {
-    const user = await User.findById(_id);
-    if (!user) {
-      return res.status(404).send({ error: 'No user found' });
-    }
-    res.send(user);
-  } catch (e) {
-    res.status(500).send(e);
-  }
-});
-
 router.patch('/users/:id', async (req, res) => {
   const _id = req.params.id;
   const updates = Object.keys(req.body);
@@ -107,19 +89,10 @@ router.patch('/users/:id', async (req, res) => {
   }
 });
 
-router.delete('/users/:id', async (req, res) => {
-  const _id = req.params.id;
-
-  if (!ObjectId.isValid(_id)) {
-    res.status(404).send({ error: 'Invalid ID' });
-  }
-
+router.delete('/users/me', auth, async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(_id);
-    if (!user) {
-      return res.status(404).send({ error: 'No user found' });
-    }
-    res.send(user);
+    await req.user.remove();
+    res.send(req.user);
   } catch (e) {
     res.status(500).send(e);
   }
