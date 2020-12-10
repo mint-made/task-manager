@@ -43,8 +43,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
   }
 });
 
-router.patch('/tasks/:id', async (req, res) => {
-  const _id = req.params.id;
+router.patch('/tasks/:id', auth, async (req, res) => {
   const allowedUpdates = ['description', 'completed'];
   const updates = Object.keys(req.body);
   const isValidOpperation = updates.every((update) =>
@@ -55,17 +54,20 @@ router.patch('/tasks/:id', async (req, res) => {
     return res.status(400).send({ error: 'update not permitted' });
   }
 
-  if (!ObjectId.isValid(_id)) {
+  if (!ObjectId.isValid(req.params.id)) {
     return res.status(404).send({ error: 'Invalid ID' });
   }
 
   try {
-    const task = await Task.findById(_id);
+    const task = await Task.findOne({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
+    if (!task) {
+      return res.status(404).send();
+    }
     updates.forEach((update) => (task[update] = req.body[update]));
     await task.save();
-    if (!task) {
-      return res.status(404).send({ error: 'No task found' });
-    }
     res.send(task);
   } catch (e) {
     res.status(400).send(e);
