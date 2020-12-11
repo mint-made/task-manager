@@ -2,11 +2,11 @@
 
 ### Project Context
 
-A node.js application to keep track of tasks that a user has.
+A node.js application for users to track their tasks.
 
 ### Project Overview
 
-A node.js application to keep track of tasks that a user has, creating, removing, updating and deleting content in response to user actions
+A node.js application for users to keep track of tasks, the user can create, edit, remove and mark tasks as complete. Users can register an account to remember their progress between user sessions. 
 
 ### Technologies Utilized
 
@@ -14,5 +14,7 @@ A node.js application to keep track of tasks that a user has, creating, removing
 - monogoDB
 - mongoose
 - REST APIs
+- bcrypt.js
+- JSON web tokens
 
 ### Attribution
