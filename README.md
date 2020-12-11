@@ -11,6 +11,7 @@ A node.js application for users to keep track of tasks, the user can create, edi
 ### Technologies Utilized
 
 - node.js
+- express.js
 - monogoDB
 - mongoose
 - REST APIs
