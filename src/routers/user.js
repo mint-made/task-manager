@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/user');
 const { ObjectId } = require('mongodb');
 const auth = require('../middleware/auth');
+const multer = require('multer');
 
 const router = new express.Router();
 router.get('/test', (req, res) => {
@@ -87,6 +88,14 @@ router.delete('/users/me', auth, async (req, res) => {
   } catch (e) {
     res.status(500).send(e);
   }
+});
+
+const upload = multer({
+  dest: 'images',
+});
+
+router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+  res.send();
 });
 
 module.exports = router;
