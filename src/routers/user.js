@@ -3,6 +3,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 const User = require('../models/user');
 const { ObjectId } = require('mongodb');
+const { sendWelcomeEmail } = require('../emails/account');
 const auth = require('../middleware/auth');
 
 const router = new express.Router();
@@ -15,6 +16,7 @@ router.post('/users', async (req, res) => {
 
   try {
     await user.save();
+    sendWelcomeEmail(user.email, user.name);
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
   } catch (e) {
