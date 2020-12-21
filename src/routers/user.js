@@ -3,7 +3,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 const User = require('../models/user');
 const { ObjectId } = require('mongodb');
-const { sendWelcomeEmail } = require('../emails/account');
+const { sendWelcomeEmail, sendCancelEmail } = require('../emails/account');
 const auth = require('../middleware/auth');
 
 const router = new express.Router();
@@ -87,6 +87,7 @@ router.patch('/users/me', auth, async (req, res) => {
 router.delete('/users/me', auth, async (req, res) => {
   try {
     await req.user.remove();
+    sendCancelEmail(req.user.email, req.user.name);
     res.send(req.user);
   } catch (e) {
     res.status(500).send(e);
