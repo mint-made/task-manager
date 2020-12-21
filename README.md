@@ -17,5 +17,6 @@ A node.js application for users to keep track of tasks, the user can create, edi
 - REST APIs
 - bcrypt.js
 - JSON web tokens
+- Jest tests
 
 ### Attribution
