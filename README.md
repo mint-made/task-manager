@@ -20,3 +20,4 @@ A node.js application for users to keep track of tasks, the user can create, edi
 - Jest tests
 
 ### Attribution
+[The Complete Node.js Developer Course - Andrew Mead](https://www.udemy.com/course/the-complete-nodejs-developer-course-2/)
