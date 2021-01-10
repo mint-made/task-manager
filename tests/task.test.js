@@ -25,5 +25,5 @@ test("Should fetch the user's tasks", async () => {
     .send()
     .expect(200);
 
-  expect(response).toEqual(2);
+  expect(response.body.length).toEqual(2);
 });
